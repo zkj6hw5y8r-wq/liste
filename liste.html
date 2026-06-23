@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f2f2f7;min-height:100vh}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f2f2f7;min-height:100vh;overflow-x:hidden}
 #login-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:2rem}
 #login-screen h1{font-size:24px;font-weight:600;color:#000;margin-bottom:6px}
 #login-screen p{font-size:14px;color:#8e8e93;margin-bottom:2rem}
@@ -39,20 +39,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .tab.active .tbadge{background:#0051a8;color:#b3d1ff}
 .tbadge{font-size:11px;font-weight:500;padding:1px 7px;border-radius:10px;background:#fff;color:#3c3c43}
 .task-list{padding:0 1.25rem;display:flex;flex-direction:column;gap:6px}
-.task-card{display:flex;align-items:center;gap:12px;padding:13px 14px;background:#fff;border-radius:12px;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
-.task-card.done-card{background:#f2f2f7}
-.task-card.pressing{opacity:0.6;transform:scale(0.97);transition:all .1s}
-.chk{width:23px;height:23px;border-radius:50%;border:1.5px solid #c7c7cc;background:transparent;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:transparent;font-size:13px;-webkit-tap-highlight-color:transparent}
-.chk:hover:not(.on){border-color:#007aff;background:#e5f0ff}
-.chk.on{background:#34c759;border-color:#34c759;color:#fff}
-.task-text{flex:1;font-size:15px;color:#000;pointer-events:none}
-.task-text.struck{text-decoration:line-through;color:#8e8e93}
-.del{width:28px;height:28px;border:none;background:transparent;cursor:pointer;color:#c7c7cc;display:flex;align-items:center;justify-content:center;border-radius:8px;font-size:15px;flex-shrink:0}
-.del:hover{background:#ffe5e5;color:#ff3b30}
 .sec-label{padding:0 1.25rem;font-size:11px;font-weight:600;color:#8e8e93;letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px;margin-top:1.25rem}
 .empty-state{text-align:center;padding:2.5rem 1rem 1.5rem}
 .empty-state p{font-size:14px;color:#8e8e93}
-.add-ghost{display:flex;align-items:center;gap:10px;padding:12px 14px;border:1.5px dashed #c7c7cc;border-radius:12px;cursor:pointer;margin:6px 1.25rem 0;color:#8e8e93;background:transparent}
+.add-ghost{display:flex;align-items:center;gap:10px;padding:12px 14px;border:1.5px dashed #c7c7cc;border-radius:12px;cursor:pointer;margin:6px 1.25rem 0;color:#8e8e93}
 .add-ghost:hover{border-color:#007aff;color:#007aff;background:#f0f6ff}
 .add-ghost span{font-size:15px}
 .add-ghost .add-icon{width:23px;height:23px;border-radius:50%;border:1.5px dashed #c7c7cc;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
@@ -65,6 +55,44 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .cancel-btn{width:28px;height:28px;border-radius:8px;border:1px solid #c7c7cc;background:transparent;color:#8e8e93;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;flex-shrink:0}
 .done-toggle{display:flex;align-items:center;gap:8px;padding:0 1.25rem;margin-top:1rem;cursor:pointer;color:#8e8e93;font-size:13px;background:none;border:none;width:100%;text-align:left}
 .done-toggle:hover{color:#3c3c43}
+
+/* SWIPE CARD */
+.swipe-wrap{position:relative;border-radius:12px;overflow:hidden}
+.swipe-actions-left{position:absolute;top:0;left:0;bottom:0;display:flex;align-items:center;padding-left:12px;gap:6px;background:#34c759;border-radius:12px}
+.swipe-actions-right{position:absolute;top:0;right:0;bottom:0;display:flex;align-items:center;padding-right:12px;gap:6px;background:#f2f2f7;border-radius:12px;justify-content:flex-end}
+.swipe-done-card .swipe-actions-right{background:#e5e5ea}
+.swipe-action-btn{width:44px;height:44px;border-radius:10px;border:none;display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer;flex-shrink:0}
+.sa-complete{background:#34c759;color:#fff}
+.sa-uncomplete{background:#8e8e93;color:#fff}
+.sa-edit{background:#007aff;color:#fff}
+.sa-move{background:#ff9500;color:#fff}
+.sa-delete{background:#ff3b30;color:#fff}
+.task-card{display:flex;align-items:center;gap:12px;padding:13px 14px;background:#fff;border-radius:12px;position:relative;z-index:1;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;transition:transform .15s ease;will-change:transform}
+.task-card.done-card{background:#f2f2f7}
+.chk{width:23px;height:23px;border-radius:50%;border:1.5px solid #c7c7cc;background:transparent;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:transparent;font-size:13px;-webkit-tap-highlight-color:transparent}
+.chk:hover:not(.on){border-color:#007aff;background:#e5f0ff}
+.chk.on{background:#34c759;border-color:#34c759;color:#fff}
+.task-text{flex:1;font-size:15px;color:#000}
+.task-text.struck{text-decoration:line-through;color:#8e8e93}
+.del{width:28px;height:28px;border:none;background:transparent;cursor:pointer;color:#c7c7cc;display:flex;align-items:center;justify-content:center;border-radius:8px;font-size:15px;flex-shrink:0}
+.del:hover{background:#ffe5e5;color:#ff3b30}
+
+/* EDIT INLINE */
+.task-edit-input{flex:1;border:none;background:transparent;font-size:15px;color:#000;outline:none;padding:0}
+
+/* MOVE SHEET */
+.sheet-bg{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:50;display:none}
+.sheet-bg.open{display:block}
+.sheet{position:fixed;bottom:0;left:0;right:0;background:#fff;border-radius:16px 16px 0 0;padding:1rem 1rem 2.5rem;z-index:51;transform:translateY(100%);transition:transform .25s ease}
+.sheet.open{transform:translateY(0)}
+.sheet-handle{width:36px;height:4px;background:#c7c7cc;border-radius:2px;margin:0 auto .75rem}
+.sheet-task-name{font-size:15px;font-weight:500;color:#000;padding:8px 4px 12px;border-bottom:0.5px solid #e5e5ea;margin-bottom:8px}
+.sheet-label{font-size:11px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:.06em;padding:0 4px 8px}
+.sheet-item{display:flex;align-items:center;gap:12px;padding:13px 4px;font-size:16px;color:#000;cursor:pointer;border:none;background:none;width:100%;text-align:left;border-bottom:0.5px solid #f2f2f7}
+.sheet-item:last-child{border-bottom:none}
+.sheet-item i{font-size:18px;color:#ff9500;width:24px;text-align:center}
+
+/* MODALS */
 .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:10;display:none;align-items:flex-end;justify-content:center}
 .modal-bg.open{display:flex}
 .modal{background:#fff;border-radius:16px 16px 0 0;padding:1.25rem;width:100%;max-width:420px;padding-bottom:2.5rem}
@@ -79,19 +107,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .modal-add-row input:focus{border-color:#007aff}
 .modal-add-row button{padding:10px 16px;border-radius:10px;border:none;background:#007aff;color:#fff;font-size:15px;cursor:pointer;font-weight:500}
 .modal-close-btn{margin-top:.75rem;width:100%;padding:13px;border:none;border-radius:12px;background:#f2f2f7;color:#000;font-size:15px;cursor:pointer;font-weight:500}
-/* BOTTOM SHEET MENU */
-.sheet-bg{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:50;display:none}
-.sheet-bg.open{display:block}
-.sheet{position:fixed;bottom:0;left:0;right:0;background:#fff;border-radius:16px 16px 0 0;padding:1rem 1rem 2.5rem;z-index:51;transform:translateY(100%);transition:transform .25s ease}
-.sheet.open{transform:translateY(0)}
-.sheet-handle{width:36px;height:4px;background:#c7c7cc;border-radius:2px;margin:0 auto .75rem}
-.sheet-title{font-size:13px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:.06em;padding:0 4px 8px;border-bottom:0.5px solid #e5e5ea;margin-bottom:4px}
-.sheet-task-name{font-size:15px;font-weight:500;color:#000;padding:8px 4px;margin-bottom:4px;border-bottom:0.5px solid #e5e5ea}
-.sheet-item{display:flex;align-items:center;gap:12px;padding:13px 4px;font-size:16px;color:#000;cursor:pointer;border:none;background:none;width:100%;text-align:left;border-bottom:0.5px solid #f2f2f7}
-.sheet-item:last-child{border-bottom:none}
-.sheet-item i{font-size:18px;color:#007aff;width:24px;text-align:center}
-.sheet-item.danger{color:#ff3b30}
-.sheet-item.danger i{color:#ff3b30}
 </style>
 </head>
 <body>
@@ -146,16 +161,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   </div>
 </div>
 
-<!-- Bottom sheet per mobile e desktop -->
+<!-- Move sheet -->
 <div class="sheet-bg" id="sheet-bg" onclick="closeSheet()"></div>
 <div class="sheet" id="sheet">
   <div class="sheet-handle"></div>
   <div class="sheet-task-name" id="sheet-task-name"></div>
-  <div class="sheet-title">Sposta in</div>
+  <div class="sheet-label">Sposta in</div>
   <div id="sheet-destinations"></div>
-  <button class="sheet-item danger" onclick="delFromSheet()"><i class="ti ti-trash"></i> Elimina task</button>
 </div>
 
+<!-- Settings modal -->
 <div class="modal-bg" id="modal-bg">
   <div class="modal">
     <div class="modal-handle"></div>
@@ -183,8 +198,8 @@ function checkAuth(){if(localStorage.getItem('liste_auth')===PASSWORD_HASH)showA
 let cats=['Casa','Lavoro','Macchina','Personale'];
 let tasks={Casa:[],Lavoro:[],Macchina:[],Personale:[]};
 let cur='Casa',doneOpen=false,syncTimeout=null;
-let sheetTaskIdx=null,sheetIsDone=false;
-let pressTimer=null,didLongPress=false;
+let moveTaskIdx=null,moveIsDone=false;
+let activeSwipe=null;
 
 function setSyncStatus(s,l){document.getElementById('sync-dot').className='sync-dot'+(s!=='ok'?' '+s:'');document.getElementById('sync-label').textContent=l;}
 async function loadFromSupabase(){setSyncStatus('syncing','Caricamento…');try{const res=await fetch(SUPABASE_URL+'/rest/v1/lists?id=eq.1&select=data',{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}});if(!res.ok)throw new Error();const rows=await res.json();if(rows.length>0&&rows[0].data&&Object.keys(rows[0].data).length>0){const d=rows[0].data;if(d.cats)cats=d.cats;if(d.tasks)tasks=d.tasks;cats.forEach(c=>{if(!tasks[c])tasks[c]=[];});}setSyncStatus('ok','Sincronizzato');}catch(e){setSyncStatus('error','Errore di connessione');}render();}
@@ -193,14 +208,105 @@ function scheduleSave(){clearTimeout(syncTimeout);syncTimeout=setTimeout(saveToS
 function pending(cat){return(tasks[cat]||[]).filter(t=>!t.done).length;}
 function doneCount(cat){return(tasks[cat]||[]).filter(t=>t.done).length;}
 
-// BOTTOM SHEET
+// SWIPE
+function resetAllSwipes(except){
+  document.querySelectorAll('.task-card').forEach(c=>{
+    if(c!==except){c.style.transform='translateX(0)';}
+  });
+  activeSwipe=null;
+}
+
+function addSwipe(card, realIdx, isDone){
+  const THRESHOLD=60;
+  let startX=0,startY=0,curX=0,dragging=false,locked=false,dir=null;
+
+  function onStart(x,y){startX=x;startY=y;curX=0;dragging=true;locked=false;dir=null;}
+  function onMove(x,y){
+    if(!dragging)return;
+    const dx=x-startX,dy=y-startY;
+    if(!locked){
+      if(Math.abs(dx)<5&&Math.abs(dy)<5)return;
+      if(Math.abs(dy)>Math.abs(dx)){dragging=false;return;}
+      locked=true;dir=dx<0?'left':'right';
+    }
+    if(dir==='left'&&dx>0)return;
+    if(dir==='right'&&dx<0)return;
+    curX=dx;
+    const maxL=-130,maxR=isDone?0:90;
+    const clamped=Math.max(maxL,Math.min(maxR,curX));
+    card.style.transition='none';
+    card.style.transform='translateX('+clamped+'px)';
+  }
+  function onEnd(){
+    if(!dragging||!locked){dragging=false;return;}
+    dragging=false;
+    card.style.transition='transform .2s ease';
+    if(dir==='left'&&curX<-THRESHOLD){
+      card.style.transform='translateX(-130px)';
+      activeSwipe=card;
+    } else if(dir==='right'&&!isDone&&curX>THRESHOLD){
+      card.style.transform='translateX(0)';
+      doComplete(realIdx);
+    } else {
+      card.style.transform='translateX(0)';
+      activeSwipe=null;
+    }
+  }
+
+  // Touch
+  card.addEventListener('touchstart',e=>{
+    if(activeSwipe&&activeSwipe!==card){resetAllSwipes(card);}
+    onStart(e.touches[0].clientX,e.touches[0].clientY);
+  },{passive:true});
+  card.addEventListener('touchmove',e=>{
+    if(locked)e.preventDefault();
+    onMove(e.touches[0].clientX,e.touches[0].clientY);
+  },{passive:false});
+  card.addEventListener('touchend',()=>onEnd());
+
+  // Mouse (Mac)
+  card.addEventListener('mousedown',e=>{
+    if(e.button!==0)return;
+    if(activeSwipe&&activeSwipe!==card){resetAllSwipes(card);}
+    onStart(e.clientX,e.clientY);
+    const onMM=ev=>{onMove(ev.clientX,ev.clientY);};
+    const onMU=()=>{onEnd();window.removeEventListener('mousemove',onMM);window.removeEventListener('mouseup',onMU);};
+    window.addEventListener('mousemove',onMM);
+    window.addEventListener('mouseup',onMU);
+  });
+}
+
+function doComplete(realIdx){
+  tasks[cur][realIdx].done=!tasks[cur][realIdx].done;
+  if(navigator.vibrate)navigator.vibrate(20);
+  scheduleSave();render();
+}
+
+function startEdit(realIdx,textEl,card){
+  resetAllSwipes();
+  const oldText=tasks[cur][realIdx].text;
+  const inp=document.createElement('input');
+  inp.className='task-edit-input';
+  inp.value=oldText;
+  textEl.replaceWith(inp);
+  inp.focus();
+  inp.select();
+  function save(){
+    const v=inp.value.trim();
+    if(v&&v!==oldText){tasks[cur][realIdx].text=v;scheduleSave();}
+    render();
+  }
+  inp.addEventListener('keydown',e=>{if(e.key==='Enter')save();if(e.key==='Escape'){render();}});
+  inp.addEventListener('blur',save);
+}
+
 function openSheet(idx,isDone){
-  sheetTaskIdx=idx; sheetIsDone=isDone;
+  moveTaskIdx=idx; moveIsDone=isDone;
   const list=isDone?(tasks[cur]||[]).filter(t=>t.done):(tasks[cur]||[]).filter(t=>!t.done);
   const t=list[idx];
   if(!t)return;
   document.getElementById('sheet-task-name').textContent=t.text;
-  const dest=document.getElementById('sheet-destinations'); dest.innerHTML='';
+  const dest=document.getElementById('sheet-destinations');dest.innerHTML='';
   cats.filter(c=>c!==cur||isDone).forEach(c=>{
     const btn=document.createElement('button');
     btn.className='sheet-item';
@@ -211,60 +317,77 @@ function openSheet(idx,isDone){
   document.getElementById('sheet-bg').classList.add('open');
   setTimeout(()=>document.getElementById('sheet').classList.add('open'),10);
 }
-function closeSheet(){
-  document.getElementById('sheet').classList.remove('open');
-  document.getElementById('sheet-bg').classList.remove('open');
-  sheetTaskIdx=null;
-}
+function closeSheet(){document.getElementById('sheet').classList.remove('open');document.getElementById('sheet-bg').classList.remove('open');moveTaskIdx=null;resetAllSwipes();}
 function moveTask(destCat){
-  if(sheetTaskIdx===null)return;
-  const list=sheetIsDone?(tasks[cur]||[]).filter(t=>t.done):(tasks[cur]||[]).filter(t=>!t.done);
-  const t=list[sheetTaskIdx]; if(!t){closeSheet();return;}
+  if(moveTaskIdx===null)return;
+  const list=moveIsDone?(tasks[cur]||[]).filter(t=>t.done):(tasks[cur]||[]).filter(t=>!t.done);
+  const t=list[moveTaskIdx];if(!t){closeSheet();return;}
   const ri=(tasks[cur]||[]).indexOf(t);
-  tasks[cur].splice(ri,1); t.done=false;
+  tasks[cur].splice(ri,1);t.done=false;
   if(!tasks[destCat])tasks[destCat]=[];
   tasks[destCat].unshift(t);
-  closeSheet(); scheduleSave(); render();
-}
-function delFromSheet(){
-  if(sheetTaskIdx===null)return;
-  const list=sheetIsDone?(tasks[cur]||[]).filter(t=>t.done):(tasks[cur]||[]).filter(t=>!t.done);
-  const t=list[sheetTaskIdx]; if(!t){closeSheet();return;}
-  const ri=(tasks[cur]||[]).indexOf(t);
-  tasks[cur].splice(ri,1);
-  closeSheet(); scheduleSave(); render();
+  closeSheet();scheduleSave();render();
 }
 
 function makeCard(t,displayIdx,isDone){
-  const el=document.createElement('div');
-  el.className='task-card'+(isDone?' done-card':'');
+  const wrap=document.createElement('div');
+  wrap.className='swipe-wrap'+(isDone?' swipe-done-card':'');
+
+  // Left reveal (complete / uncomplete)
+  const leftAct=document.createElement('div');
+  leftAct.className='swipe-actions-left';
+  leftAct.style.background=isDone?'#8e8e93':'#34c759';
+  const completeBtn=document.createElement('button');
+  completeBtn.className='swipe-action-btn '+(isDone?'sa-uncomplete':'sa-complete');
+  completeBtn.innerHTML=isDone?'<i class="ti ti-x"></i>':'<i class="ti ti-check"></i>';
+  completeBtn.title=isDone?'Ripristina':'Completa';
+  leftAct.appendChild(completeBtn);
+  wrap.appendChild(leftAct);
+
+  // Right reveal (edit + move)
+  const rightAct=document.createElement('div');
+  rightAct.className='swipe-actions-right';
+  const moveBtn=document.createElement('button');
+  moveBtn.className='swipe-action-btn sa-move';
+  moveBtn.innerHTML='<i class="ti ti-folder-arrow-right"></i>';
+  moveBtn.title='Sposta';
+  const editBtn=document.createElement('button');
+  editBtn.className='swipe-action-btn sa-edit';
+  editBtn.innerHTML='<i class="ti ti-pencil"></i>';
+  editBtn.title='Modifica';
+  rightAct.appendChild(editBtn);
+  rightAct.appendChild(moveBtn);
+  wrap.appendChild(rightAct);
+
   const ri=(tasks[cur]||[]).indexOf(t);
-  el.innerHTML=(isDone?'<button class="chk on" onclick="toggle('+ri+')"><i class="ti ti-check"></i></button>':'<button class="chk" onclick="toggle('+ri+')"></button>')
-    +'<span class="task-text'+(isDone?' struck':'')+'">'+t.text+'</span>'
-    +'<button class="del" onclick="del('+ri+')"><i class="ti ti-trash"></i></button>';
+  const card=document.createElement('div');
+  card.className='task-card'+(isDone?' done-card':'');
+  const chkBtn=document.createElement('button');
+  chkBtn.className='chk'+(isDone?' on':'');
+  chkBtn.innerHTML=isDone?'<i class="ti ti-check"></i>':'';
+  chkBtn.onclick=(e)=>{e.stopPropagation();if(activeSwipe===card){resetAllSwipes();return;}toggle(ri);};
+  const textEl=document.createElement('span');
+  textEl.className='task-text'+(isDone?' struck':'');
+  textEl.textContent=t.text;
+  const delBtn=document.createElement('button');
+  delBtn.className='del';
+  delBtn.innerHTML='<i class="ti ti-trash"></i>';
+  delBtn.onclick=(e)=>{e.stopPropagation();del(ri);};
+  card.appendChild(chkBtn);card.appendChild(textEl);card.appendChild(delBtn);
+  wrap.appendChild(card);
 
-  // Desktop: right click
-  el.addEventListener('contextmenu',e=>{e.preventDefault();openSheet(displayIdx,isDone);});
+  // Button actions
+  completeBtn.onclick=()=>{doComplete(ri);};
+  editBtn.onclick=()=>{startEdit(ri,textEl,card);};
+  moveBtn.onclick=()=>{openSheet(displayIdx,isDone);};
 
-  // Mobile: long press con vibrazione
-  el.addEventListener('touchstart',e=>{
-    didLongPress=false;
-    pressTimer=setTimeout(()=>{
-      didLongPress=true;
-      el.classList.add('pressing');
-      if(navigator.vibrate)navigator.vibrate(30);
-      openSheet(displayIdx,isDone);
-      setTimeout(()=>el.classList.remove('pressing'),200);
-    },500);
-  },{passive:true});
-  el.addEventListener('touchend',e=>{
-    clearTimeout(pressTimer);
+  // Tap on card when swiped — reset
+  card.addEventListener('click',e=>{
+    if(activeSwipe===card){e.preventDefault();e.stopPropagation();resetAllSwipes();return;}
   });
-  el.addEventListener('touchmove',e=>{
-    clearTimeout(pressTimer);
-  });
 
-  return el;
+  addSwipe(card,ri,isDone);
+  return wrap;
 }
 
 function render(){
@@ -272,7 +395,7 @@ function render(){
   document.getElementById('view-title').textContent=cur;
   document.getElementById('view-sub').textContent=p===0&&d===0?'Nessun task':p===0?'Tutto fatto!':p===1?'1 task in sospeso':p+' task in sospeso';
   const tw=document.getElementById('tabs');tw.innerHTML='';
-  cats.forEach(c=>{const p2=pending(c);const btn=document.createElement('button');btn.className='tab'+(c===cur?' active':'');btn.innerHTML=c+(p2>0?'<span class="tbadge">'+p2+'</span>':'');btn.onclick=()=>{cur=c;doneOpen=false;closeInline();render();};tw.appendChild(btn);});
+  cats.forEach(c=>{const p2=pending(c);const btn=document.createElement('button');btn.className='tab'+(c===cur?' active':'');btn.innerHTML=c+(p2>0?'<span class="tbadge">'+p2+'</span>':'');btn.onclick=()=>{cur=c;doneOpen=false;closeInline();resetAllSwipes();render();};tw.appendChild(btn);});
   const todoItems=(tasks[cur]||[]).filter(t=>!t.done);
   const doneItems=(tasks[cur]||[]).filter(t=>t.done);
   document.getElementById('sec-label-todo').textContent=todoItems.length>0?'In sospeso':'';
@@ -298,6 +421,11 @@ function closeModal(){document.getElementById('modal-bg').classList.remove('open
 function renderCatList(){const cl=document.getElementById('cat-list');cl.innerHTML='';cats.forEach((c,i)=>{const row=document.createElement('div');row.className='cat-item';row.innerHTML='<span>'+c+'</span><button class="cat-del-btn" onclick="delCat('+i+')"><i class="ti ti-x"></i></button>';cl.appendChild(row);});}
 function addCat(){const inp=document.getElementById('new-cat');const txt=inp.value.trim();if(!txt||cats.includes(txt))return;cats.push(txt);tasks[txt]=[];inp.value='';scheduleSave();renderCatList();}
 function delCat(i){const c=cats[i];if(cats.length<=1)return;cats.splice(i,1);delete tasks[c];if(cur===c)cur=cats[0];scheduleSave();renderCatList();}
+
+// Close swipes on tap outside
+document.addEventListener('click',e=>{
+  if(activeSwipe&&!activeSwipe.contains(e.target))resetAllSwipes();
+});
 
 checkAuth();
 </script>
