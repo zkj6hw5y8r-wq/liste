@@ -217,7 +217,7 @@ function resetAllSwipes(except){
 }
 
 function addSwipe(card, realIdx, isDone){
-  const THRESHOLD=60;
+  const THRESHOLD_LEFT=60,THRESHOLD_RIGHT=200;
   let startX=0,startY=0,curX=0,dragging=false,locked=false,dir=null;
 
   function onStart(x,y){startX=x;startY=y;curX=0;dragging=true;locked=false;dir=null;}
@@ -241,10 +241,10 @@ function addSwipe(card, realIdx, isDone){
     if(!dragging||!locked){dragging=false;return;}
     dragging=false;
     card.style.transition='transform .2s ease';
-    if(dir==='left'&&curX<-THRESHOLD){
+    if(dir==='left'&&curX<-THRESHOLD_LEFT){
       card.style.transform='translateX(-130px)';
       activeSwipe=card;
-    } else if(dir==='right'&&!isDone&&curX>THRESHOLD){
+    } else if(dir==='right'&&!isDone&&curX>THRESHOLD_RIGHT){
       card.style.transform='translateX(0)';
       doComplete(realIdx);
     } else {
@@ -310,7 +310,7 @@ function openSheet(idx,isDone){
   cats.filter(c=>c!==cur||isDone).forEach(c=>{
     const btn=document.createElement('button');
     btn.className='sheet-item';
-    btn.innerHTML='<i class="ti ti-folder-arrow-right"></i> '+c;
+    btn.innerHTML='<i class="ti ti-folder"></i> '+c;
     btn.onclick=()=>moveTask(c);
     dest.appendChild(btn);
   });
@@ -349,7 +349,7 @@ function makeCard(t,displayIdx,isDone){
   rightAct.className='swipe-actions-right';
   const moveBtn=document.createElement('button');
   moveBtn.className='swipe-action-btn sa-move';
-  moveBtn.innerHTML='<i class="ti ti-folder-arrow-right"></i>';
+  moveBtn.innerHTML='<i class="ti ti-folders"></i>';
   moveBtn.title='Sposta';
   const editBtn=document.createElement('button');
   editBtn.className='swipe-action-btn sa-edit';
