@@ -60,7 +60,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .swipe-bg-right{position:absolute;inset:0;background:#34c759;border-radius:12px;display:flex;align-items:center;padding-left:16px}
 .swipe-bg-right .check-icon{font-size:22px;color:#fff;opacity:0;transition:opacity .1s}
 .swipe-bg-right .check-icon.visible{opacity:1}
-.swipe-actions-right{position:absolute;top:0;right:0;bottom:0;display:flex;align-items:center;padding-right:10px;gap:6px}
+.swipe-actions-right{position:absolute;top:0;right:0;bottom:0;display:flex;align-items:center;padding-right:10px;gap:6px;transition:opacity .1s}
+.swipe-actions-right.hidden{opacity:0;pointer-events:none}
 .swipe-action-btn{width:44px;height:44px;border-radius:10px;border:none;display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer;flex-shrink:0}
 .sa-edit{background:#007aff;color:#fff}
 .sa-move{background:#ff9500;color:#fff}
@@ -97,9 +98,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .sheet-item:last-child{border-bottom:none}
 .sheet-item i{font-size:18px;color:#ff9500;width:24px;text-align:center}
 /* MODAL */
-.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:10;display:none;align-items:flex-end;justify-content:center}
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:10;display:none;align-items:flex-end;justify-content:center;cursor:pointer}
 .modal-bg.open{display:flex}
-.modal{background:#fff;border-radius:16px 16px 0 0;padding:1.25rem;width:100%;max-width:420px;padding-bottom:2.5rem}
+.modal{background:#fff;border-radius:16px 16px 0 0;padding:1.25rem;width:100%;max-width:420px;padding-bottom:2.5rem;cursor:default}
 .modal-handle{width:36px;height:4px;background:#c7c7cc;border-radius:2px;margin:0 auto 1.25rem}
 .modal h2{font-size:17px;font-weight:600;color:#000;margin-bottom:1rem}
 .cat-item{display:flex;align-items:center;padding:11px 0;border-bottom:0.5px solid #e5e5ea;cursor:grab;gap:8px}
@@ -186,7 +187,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 </div>
 
 <!-- Settings modal -->
-<div class="modal-bg" id="modal-bg">
+<div class="modal-bg" id="modal-bg" onclick="if(event.target===this)closeModal()">
   <div class="modal">
     <div class="modal-handle"></div>
     <h2>Gestisci schede</h2>
@@ -297,7 +298,7 @@ function startEdit(ri,textEl){
   inp.addEventListener('blur',save);
 }
 
-function addSwipe(card,ri,isDone,bgEl,checkIconEl){
+function addSwipe(card,ri,isDone,bgEl,checkIconEl,rightActEl){
   let startX=0,startY=0,curX=0,dragging=false,locked=false,dir=null;
 
   function onStart(x,y){
@@ -317,12 +318,13 @@ function addSwipe(card,ri,isDone,bgEl,checkIconEl){
     if(dir==='right'&&(dx<0||isDone))return;
     curX=dx;
     if(dir==='right'){
-      // Full-width follow with green bg
+      rightActEl.classList.add('hidden');
       const pct=Math.min(curX/COMPLETE_THRESHOLD,1);
       card.style.transform='translateX('+curX+'px)';
       bgEl.style.opacity=Math.min(pct*1.5,1);
       checkIconEl.classList.toggle('visible', pct>0.5);
     } else {
+      rightActEl.classList.remove('hidden');
       const clamped=Math.max(-130,curX);
       card.style.transform='translateX('+clamped+'px)';
     }
@@ -335,7 +337,6 @@ function addSwipe(card,ri,isDone,bgEl,checkIconEl){
       card.style.transform='translateX(-130px)';
       activeSwipe=card;
     } else if(dir==='right'&&!isDone&&curX>=COMPLETE_THRESHOLD){
-      // Animate off screen then complete
       card.style.transition='transform .25s ease';
       card.style.transform='translateX('+window.innerWidth+'px)';
       setTimeout(()=>{doComplete(ri);},250);
@@ -343,6 +344,7 @@ function addSwipe(card,ri,isDone,bgEl,checkIconEl){
       card.style.transform='translateX(0)';
       bgEl.style.opacity=0;
       checkIconEl.classList.remove('visible');
+      rightActEl.classList.remove('hidden');
       activeSwipe=null;
     }
   }
@@ -417,7 +419,7 @@ function makeCard(t,dispIdx,isDone){
   card.addEventListener('contextmenu',e=>openCtx(e,ri,isDone,dispIdx,textEl));
 
   // Touch swipe (iPhone)
-  addSwipe(card,ri,isDone,bgEl,checkIconEl);
+  addSwipe(card,ri,isDone,bgEl,checkIconEl,rightAct);
 
   return wrap;
 }
@@ -458,16 +460,28 @@ function toggleDoneSection(){doneOpen=!doneOpen;render();}
 function openModal(){renderCatList();document.getElementById('modal-bg').classList.add('open');}
 function closeModal(){document.getElementById('modal-bg').classList.remove('open');render();}
 
-// DRAG & DROP schede
-let dragSrcIdx=null;
+// REORDER schede (touch + mouse)
+let dragSrcIdx=null, dragGhost=null, dragTargetIdx=null;
+
 function renderCatList(){
   const cl=document.getElementById('cat-list'); cl.innerHTML='';
   cats.forEach((c,i)=>{
     const row=document.createElement('div');
     row.className='cat-item';
-    row.draggable=true;
     row.dataset.idx=i;
-    row.innerHTML='<span class="drag-handle"><i class="ti ti-grip-vertical"></i></span><span>'+c+'</span><button class="cat-del-btn" onclick="delCat('+i+')"><i class="ti ti-x"></i></button>';
+    const handle=document.createElement('span');
+    handle.className='drag-handle';
+    handle.innerHTML='<i class="ti ti-grip-vertical"></i>';
+    const label=document.createElement('span');
+    label.textContent=c;
+    const delBtn=document.createElement('button');
+    delBtn.className='cat-del-btn';
+    delBtn.innerHTML='<i class="ti ti-x"></i>';
+    delBtn.onclick=()=>delCat(i);
+    row.appendChild(handle); row.appendChild(label); row.appendChild(delBtn);
+
+    // Mouse drag (Mac)
+    row.draggable=true;
     row.addEventListener('dragstart',e=>{dragSrcIdx=i;row.classList.add('dragging');e.dataTransfer.effectAllowed='move';});
     row.addEventListener('dragend',()=>{row.classList.remove('dragging');document.querySelectorAll('.cat-item').forEach(r=>r.classList.remove('drag-over'));});
     row.addEventListener('dragover',e=>{e.preventDefault();row.classList.add('drag-over');});
@@ -478,9 +492,50 @@ function renderCatList(){
       if(dragSrcIdx===null||dragSrcIdx===destIdx)return;
       const moved=cats.splice(dragSrcIdx,1)[0];
       cats.splice(destIdx,0,moved);
-      dragSrcIdx=null;
-      scheduleSave(); renderCatList();
+      dragSrcIdx=null; scheduleSave(); renderCatList();
     });
+
+    // Touch drag (iPhone)
+    handle.addEventListener('touchstart',e=>{
+      e.stopPropagation();
+      dragSrcIdx=i;
+      const touch=e.touches[0];
+      row.classList.add('dragging');
+      // ghost
+      dragGhost=row.cloneNode(true);
+      dragGhost.style.cssText='position:fixed;left:0;right:0;opacity:0.85;z-index:200;background:#fff;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.15);pointer-events:none;padding:11px 0;';
+      dragGhost.style.top=(row.getBoundingClientRect().top)+'px';
+      document.body.appendChild(dragGhost);
+    },{passive:true});
+
+    handle.addEventListener('touchmove',e=>{
+      if(dragSrcIdx===null)return;
+      e.preventDefault();
+      const touch=e.touches[0];
+      dragGhost.style.top=(touch.clientY-22)+'px';
+      // find target row
+      const rows=[...document.querySelectorAll('#cat-list .cat-item')];
+      rows.forEach(r=>r.classList.remove('drag-over'));
+      const target=rows.find(r=>{
+        const rect=r.getBoundingClientRect();
+        return touch.clientY>=rect.top && touch.clientY<=rect.bottom;
+      });
+      if(target&&target!==row){target.classList.add('drag-over');dragTargetIdx=parseInt(target.dataset.idx);}
+      else dragTargetIdx=null;
+    },{passive:false});
+
+    handle.addEventListener('touchend',()=>{
+      if(dragGhost){dragGhost.remove();dragGhost=null;}
+      document.querySelectorAll('.cat-item').forEach(r=>{r.classList.remove('dragging');r.classList.remove('drag-over');});
+      if(dragSrcIdx!==null&&dragTargetIdx!==null&&dragSrcIdx!==dragTargetIdx){
+        const moved=cats.splice(dragSrcIdx,1)[0];
+        cats.splice(dragTargetIdx,0,moved);
+        scheduleSave();
+      }
+      dragSrcIdx=null; dragTargetIdx=null;
+      renderCatList();
+    });
+
     cl.appendChild(row);
   });
 }
