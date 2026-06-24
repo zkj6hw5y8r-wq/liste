@@ -55,31 +55,36 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .cancel-btn{width:28px;height:28px;border-radius:8px;border:1px solid #c7c7cc;background:transparent;color:#8e8e93;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;flex-shrink:0}
 .done-toggle{display:flex;align-items:center;gap:8px;padding:0 1.25rem;margin-top:1rem;cursor:pointer;color:#8e8e93;font-size:13px;background:none;border:none;width:100%;text-align:left}
 .done-toggle:hover{color:#3c3c43}
-
-/* SWIPE CARD */
+/* SWIPE */
 .swipe-wrap{position:relative;border-radius:12px;overflow:hidden}
-.swipe-actions-left{position:absolute;top:0;left:0;bottom:0;display:flex;align-items:center;padding-left:12px;gap:6px;background:#34c759;border-radius:12px}
-.swipe-actions-right{position:absolute;top:0;right:0;bottom:0;display:flex;align-items:center;padding-right:12px;gap:6px;background:#f2f2f7;border-radius:12px;justify-content:flex-end}
-.swipe-done-card .swipe-actions-right{background:#e5e5ea}
+.swipe-bg-right{position:absolute;inset:0;background:#34c759;border-radius:12px;display:flex;align-items:center;padding-left:16px}
+.swipe-bg-right .check-icon{font-size:22px;color:#fff;opacity:0;transition:opacity .1s}
+.swipe-bg-right .check-icon.visible{opacity:1}
+.swipe-actions-right{position:absolute;top:0;right:0;bottom:0;display:flex;align-items:center;padding-right:10px;gap:6px}
 .swipe-action-btn{width:44px;height:44px;border-radius:10px;border:none;display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer;flex-shrink:0}
-.sa-complete{background:#34c759;color:#fff}
-.sa-uncomplete{background:#8e8e93;color:#fff}
 .sa-edit{background:#007aff;color:#fff}
 .sa-move{background:#ff9500;color:#fff}
-.sa-delete{background:#ff3b30;color:#fff}
-.task-card{display:flex;align-items:center;gap:12px;padding:13px 14px;background:#fff;border-radius:12px;position:relative;z-index:1;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;transition:transform .15s ease;will-change:transform}
+.task-card{display:flex;align-items:center;gap:12px;padding:13px 14px;background:#fff;border-radius:12px;position:relative;z-index:1;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;will-change:transform}
 .task-card.done-card{background:#f2f2f7}
 .chk{width:23px;height:23px;border-radius:50%;border:1.5px solid #c7c7cc;background:transparent;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:transparent;font-size:13px;-webkit-tap-highlight-color:transparent}
 .chk:hover:not(.on){border-color:#007aff;background:#e5f0ff}
 .chk.on{background:#34c759;border-color:#34c759;color:#fff}
-.task-text{flex:1;font-size:15px;color:#000}
+.task-text{flex:1;font-size:15px;color:#000;pointer-events:none}
 .task-text.struck{text-decoration:line-through;color:#8e8e93}
 .del{width:28px;height:28px;border:none;background:transparent;cursor:pointer;color:#c7c7cc;display:flex;align-items:center;justify-content:center;border-radius:8px;font-size:15px;flex-shrink:0}
 .del:hover{background:#ffe5e5;color:#ff3b30}
-
-/* EDIT INLINE */
 .task-edit-input{flex:1;border:none;background:transparent;font-size:15px;color:#000;outline:none;padding:0}
-
+/* CONTEXT MENU */
+.ctx-menu{position:fixed;background:#fff;border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,0.18);z-index:100;min-width:190px;overflow:hidden;display:none}
+.ctx-menu.open{display:block}
+.ctx-item{display:flex;align-items:center;gap:10px;padding:11px 16px;font-size:15px;color:#000;cursor:pointer;border:none;background:none;width:100%;text-align:left;border-bottom:0.5px solid #f2f2f7}
+.ctx-item:last-child{border-bottom:none}
+.ctx-item i{font-size:17px;width:20px;text-align:center;color:#007aff}
+.ctx-item.danger{color:#ff3b30}
+.ctx-item.danger i{color:#ff3b30}
+.ctx-item.move-item i{color:#ff9500}
+.ctx-overlay{position:fixed;inset:0;z-index:99;display:none}
+.ctx-overlay.open{display:block}
 /* MOVE SHEET */
 .sheet-bg{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:50;display:none}
 .sheet-bg.open{display:block}
@@ -91,14 +96,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .sheet-item{display:flex;align-items:center;gap:12px;padding:13px 4px;font-size:16px;color:#000;cursor:pointer;border:none;background:none;width:100%;text-align:left;border-bottom:0.5px solid #f2f2f7}
 .sheet-item:last-child{border-bottom:none}
 .sheet-item i{font-size:18px;color:#ff9500;width:24px;text-align:center}
-
-/* MODALS */
+/* MODAL */
 .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:10;display:none;align-items:flex-end;justify-content:center}
 .modal-bg.open{display:flex}
 .modal{background:#fff;border-radius:16px 16px 0 0;padding:1.25rem;width:100%;max-width:420px;padding-bottom:2.5rem}
 .modal-handle{width:36px;height:4px;background:#c7c7cc;border-radius:2px;margin:0 auto 1.25rem}
 .modal h2{font-size:17px;font-weight:600;color:#000;margin-bottom:1rem}
-.cat-item{display:flex;align-items:center;padding:11px 0;border-bottom:0.5px solid #e5e5ea}
+.cat-item{display:flex;align-items:center;padding:11px 0;border-bottom:0.5px solid #e5e5ea;cursor:grab;gap:8px}
+.cat-item.dragging{opacity:0.4}
+.cat-item.drag-over{border-top:2px solid #007aff}
+.drag-handle{color:#c7c7cc;font-size:18px;cursor:grab;padding:0 4px;flex-shrink:0}
 .cat-item span{flex:1;font-size:15px;color:#000}
 .cat-del-btn{width:28px;height:28px;border:none;background:none;cursor:pointer;color:#c7c7cc;display:flex;align-items:center;justify-content:center;border-radius:8px;font-size:15px}
 .cat-del-btn:hover{background:#ffe5e5;color:#ff3b30}
@@ -161,6 +168,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   </div>
 </div>
 
+<!-- Context menu (Mac) -->
+<div class="ctx-overlay" id="ctx-overlay" onclick="closeCtx()"></div>
+<div class="ctx-menu" id="ctx-menu">
+  <button class="ctx-item" id="ctx-edit-btn"><i class="ti ti-pencil"></i> Modifica</button>
+  <button class="ctx-item move-item" id="ctx-move-btn"><i class="ti ti-folders"></i> Sposta in…</button>
+  <button class="ctx-item danger" id="ctx-del-btn"><i class="ti ti-trash"></i> Elimina</button>
+</div>
+
 <!-- Move sheet -->
 <div class="sheet-bg" id="sheet-bg" onclick="closeSheet()"></div>
 <div class="sheet" id="sheet">
@@ -188,6 +203,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 const SUPABASE_URL='https://kptyfknmwalpbiovsqgt.supabase.co';
 const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtwdHlma25td2FscGJpb3ZzcWd0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA5MDEyMTUsImV4cCI6MjA5NjQ3NzIxNX0.aOrLUXnTdb3zMdxjtV2_jluSwf7P_gvcG9ttGVfDt9U';
 const PASSWORD_HASH='147701e69dce68215106b228d9c8824fefd8cd71e06b386192bb121ed8d929c1';
+const COMPLETE_THRESHOLD=200;
+const LEFT_THRESHOLD=60;
 
 async function sha256(str){const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(str));return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');}
 async function doLogin(){const v=document.getElementById('pwd-input').value;const h=await sha256(v);if(h===PASSWORD_HASH){localStorage.setItem('liste_auth',h);showApp();}else{document.getElementById('login-error').textContent='Password errata.';document.getElementById('pwd-input').value='';}}
@@ -198,8 +215,9 @@ function checkAuth(){if(localStorage.getItem('liste_auth')===PASSWORD_HASH)showA
 let cats=['Casa','Lavoro','Macchina','Personale'];
 let tasks={Casa:[],Lavoro:[],Macchina:[],Personale:[]};
 let cur='Casa',doneOpen=false,syncTimeout=null;
-let moveTaskIdx=null,moveIsDone=false;
 let activeSwipe=null;
+let ctxRealIdx=null,ctxIsDone=false,ctxDisplayIdx=null,ctxTextEl=null;
+let moveTaskIdx=null,moveIsDone=false;
 
 function setSyncStatus(s,l){document.getElementById('sync-dot').className='sync-dot'+(s!=='ok'?' '+s:'');document.getElementById('sync-label').textContent=l;}
 async function loadFromSupabase(){setSyncStatus('syncing','Caricamento…');try{const res=await fetch(SUPABASE_URL+'/rest/v1/lists?id=eq.1&select=data',{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}});if(!res.ok)throw new Error();const rows=await res.json();if(rows.length>0&&rows[0].data&&Object.keys(rows[0].data).length>0){const d=rows[0].data;if(d.cats)cats=d.cats;if(d.tasks)tasks=d.tasks;cats.forEach(c=>{if(!tasks[c])tasks[c]=[];});}setSyncStatus('ok','Sincronizzato');}catch(e){setSyncStatus('error','Errore di connessione');}render();}
@@ -208,105 +226,44 @@ function scheduleSave(){clearTimeout(syncTimeout);syncTimeout=setTimeout(saveToS
 function pending(cat){return(tasks[cat]||[]).filter(t=>!t.done).length;}
 function doneCount(cat){return(tasks[cat]||[]).filter(t=>t.done).length;}
 
-// SWIPE
 function resetAllSwipes(except){
-  document.querySelectorAll('.task-card').forEach(c=>{
-    if(c!==except){c.style.transform='translateX(0)';}
-  });
-  activeSwipe=null;
+  document.querySelectorAll('.task-card').forEach(c=>{if(c!==except){c.style.transition='transform .2s ease';c.style.transform='translateX(0)';}});
+  if(!except)activeSwipe=null;
 }
 
-function addSwipe(card, realIdx, isDone){
-  const THRESHOLD_LEFT=60,THRESHOLD_RIGHT=200;
-  let startX=0,startY=0,curX=0,dragging=false,locked=false,dir=null;
-
-  function onStart(x,y){startX=x;startY=y;curX=0;dragging=true;locked=false;dir=null;}
-  function onMove(x,y){
-    if(!dragging)return;
-    const dx=x-startX,dy=y-startY;
-    if(!locked){
-      if(Math.abs(dx)<5&&Math.abs(dy)<5)return;
-      if(Math.abs(dy)>Math.abs(dx)){dragging=false;return;}
-      locked=true;dir=dx<0?'left':'right';
-    }
-    if(dir==='left'&&dx>0)return;
-    if(dir==='right'&&dx<0)return;
-    curX=dx;
-    const maxL=-130,maxR=isDone?0:90;
-    const clamped=Math.max(maxL,Math.min(maxR,curX));
-    card.style.transition='none';
-    card.style.transform='translateX('+clamped+'px)';
-  }
-  function onEnd(){
-    if(!dragging||!locked){dragging=false;return;}
-    dragging=false;
-    card.style.transition='transform .2s ease';
-    if(dir==='left'&&curX<-THRESHOLD_LEFT){
-      card.style.transform='translateX(-130px)';
-      activeSwipe=card;
-    } else if(dir==='right'&&!isDone&&curX>THRESHOLD_RIGHT){
-      card.style.transform='translateX(0)';
-      doComplete(realIdx);
-    } else {
-      card.style.transform='translateX(0)';
-      activeSwipe=null;
-    }
-  }
-
-  // Touch
-  card.addEventListener('touchstart',e=>{
-    if(activeSwipe&&activeSwipe!==card){resetAllSwipes(card);}
-    onStart(e.touches[0].clientX,e.touches[0].clientY);
-  },{passive:true});
-  card.addEventListener('touchmove',e=>{
-    if(locked)e.preventDefault();
-    onMove(e.touches[0].clientX,e.touches[0].clientY);
-  },{passive:false});
-  card.addEventListener('touchend',()=>onEnd());
-
-  // Mouse (Mac)
-  card.addEventListener('mousedown',e=>{
-    if(e.button!==0)return;
-    if(activeSwipe&&activeSwipe!==card){resetAllSwipes(card);}
-    onStart(e.clientX,e.clientY);
-    const onMM=ev=>{onMove(ev.clientX,ev.clientY);};
-    const onMU=()=>{onEnd();window.removeEventListener('mousemove',onMM);window.removeEventListener('mouseup',onMU);};
-    window.addEventListener('mousemove',onMM);
-    window.addEventListener('mouseup',onMU);
-  });
+// CONTEXT MENU (Mac only)
+function openCtx(e,ri,isDone,dispIdx,textEl){
+  e.preventDefault();
+  ctxRealIdx=ri; ctxIsDone=isDone; ctxDisplayIdx=dispIdx; ctxTextEl=textEl;
+  const menu=document.getElementById('ctx-menu');
+  document.getElementById('ctx-overlay').classList.add('open');
+  menu.classList.add('open');
+  const x=Math.min(e.clientX,window.innerWidth-200);
+  const y=Math.min(e.clientY,window.innerHeight-140);
+  menu.style.left=x+'px'; menu.style.top=y+'px';
 }
+function closeCtx(){document.getElementById('ctx-menu').classList.remove('open');document.getElementById('ctx-overlay').classList.remove('open');}
 
-function doComplete(realIdx){
-  tasks[cur][realIdx].done=!tasks[cur][realIdx].done;
-  if(navigator.vibrate)navigator.vibrate(20);
-  scheduleSave();render();
-}
+document.getElementById('ctx-edit-btn').onclick=()=>{
+  if(ctxTextEl&&ctxRealIdx!==null)startEdit(ctxRealIdx,ctxTextEl);
+  closeCtx();
+};
+document.getElementById('ctx-move-btn').onclick=()=>{
+  closeCtx();
+  if(ctxDisplayIdx!==null)openSheet(ctxDisplayIdx,ctxIsDone);
+};
+document.getElementById('ctx-del-btn').onclick=()=>{
+  if(ctxRealIdx!==null){tasks[cur].splice(ctxRealIdx,1);scheduleSave();render();}
+  closeCtx();
+};
 
-function startEdit(realIdx,textEl,card){
-  resetAllSwipes();
-  const oldText=tasks[cur][realIdx].text;
-  const inp=document.createElement('input');
-  inp.className='task-edit-input';
-  inp.value=oldText;
-  textEl.replaceWith(inp);
-  inp.focus();
-  inp.select();
-  function save(){
-    const v=inp.value.trim();
-    if(v&&v!==oldText){tasks[cur][realIdx].text=v;scheduleSave();}
-    render();
-  }
-  inp.addEventListener('keydown',e=>{if(e.key==='Enter')save();if(e.key==='Escape'){render();}});
-  inp.addEventListener('blur',save);
-}
-
-function openSheet(idx,isDone){
-  moveTaskIdx=idx; moveIsDone=isDone;
+// MOVE SHEET
+function openSheet(dispIdx,isDone){
+  moveTaskIdx=dispIdx; moveIsDone=isDone;
   const list=isDone?(tasks[cur]||[]).filter(t=>t.done):(tasks[cur]||[]).filter(t=>!t.done);
-  const t=list[idx];
-  if(!t)return;
+  const t=list[dispIdx]; if(!t)return;
   document.getElementById('sheet-task-name').textContent=t.text;
-  const dest=document.getElementById('sheet-destinations');dest.innerHTML='';
+  const dest=document.getElementById('sheet-destinations'); dest.innerHTML='';
   cats.filter(c=>c!==cur||isDone).forEach(c=>{
     const btn=document.createElement('button');
     btn.className='sheet-item';
@@ -321,40 +278,109 @@ function closeSheet(){document.getElementById('sheet').classList.remove('open');
 function moveTask(destCat){
   if(moveTaskIdx===null)return;
   const list=moveIsDone?(tasks[cur]||[]).filter(t=>t.done):(tasks[cur]||[]).filter(t=>!t.done);
-  const t=list[moveTaskIdx];if(!t){closeSheet();return;}
+  const t=list[moveTaskIdx]; if(!t){closeSheet();return;}
   const ri=(tasks[cur]||[]).indexOf(t);
-  tasks[cur].splice(ri,1);t.done=false;
+  tasks[cur].splice(ri,1); t.done=false;
   if(!tasks[destCat])tasks[destCat]=[];
   tasks[destCat].unshift(t);
-  closeSheet();scheduleSave();render();
+  closeSheet(); scheduleSave(); render();
 }
 
-function makeCard(t,displayIdx,isDone){
+function startEdit(ri,textEl){
+  resetAllSwipes();
+  const oldText=tasks[cur][ri].text;
+  const inp=document.createElement('input');
+  inp.className='task-edit-input'; inp.value=oldText;
+  textEl.replaceWith(inp); inp.focus(); inp.select();
+  function save(){const v=inp.value.trim();if(v&&v!==oldText){tasks[cur][ri].text=v;scheduleSave();}render();}
+  inp.addEventListener('keydown',e=>{if(e.key==='Enter')save();if(e.key==='Escape')render();});
+  inp.addEventListener('blur',save);
+}
+
+function addSwipe(card,ri,isDone,bgEl,checkIconEl){
+  let startX=0,startY=0,curX=0,dragging=false,locked=false,dir=null;
+
+  function onStart(x,y){
+    startX=x; startY=y; curX=0; dragging=true; locked=false; dir=null;
+    card.style.transition='none';
+  }
+  function onMove(x,y){
+    if(!dragging)return;
+    const dx=x-startX, dy=y-startY;
+    if(!locked){
+      if(Math.abs(dx)<5&&Math.abs(dy)<5)return;
+      if(Math.abs(dy)>Math.abs(dx)){dragging=false;return;}
+      locked=true; dir=dx<0?'left':'right';
+      if(activeSwipe&&activeSwipe!==card)resetAllSwipes(card);
+    }
+    if(dir==='left'&&dx>0)return;
+    if(dir==='right'&&(dx<0||isDone))return;
+    curX=dx;
+    if(dir==='right'){
+      // Full-width follow with green bg
+      const pct=Math.min(curX/COMPLETE_THRESHOLD,1);
+      card.style.transform='translateX('+curX+'px)';
+      bgEl.style.opacity=Math.min(pct*1.5,1);
+      checkIconEl.classList.toggle('visible', pct>0.5);
+    } else {
+      const clamped=Math.max(-130,curX);
+      card.style.transform='translateX('+clamped+'px)';
+    }
+  }
+  function onEnd(){
+    if(!dragging||!locked){dragging=false;return;}
+    dragging=false;
+    card.style.transition='transform .2s ease';
+    if(dir==='left'&&curX<-LEFT_THRESHOLD){
+      card.style.transform='translateX(-130px)';
+      activeSwipe=card;
+    } else if(dir==='right'&&!isDone&&curX>=COMPLETE_THRESHOLD){
+      // Animate off screen then complete
+      card.style.transition='transform .25s ease';
+      card.style.transform='translateX('+window.innerWidth+'px)';
+      setTimeout(()=>{doComplete(ri);},250);
+    } else {
+      card.style.transform='translateX(0)';
+      bgEl.style.opacity=0;
+      checkIconEl.classList.remove('visible');
+      activeSwipe=null;
+    }
+  }
+
+  // Touch only
+  card.addEventListener('touchstart',e=>{onStart(e.touches[0].clientX,e.touches[0].clientY);},{passive:true});
+  card.addEventListener('touchmove',e=>{if(locked)e.preventDefault();onMove(e.touches[0].clientX,e.touches[0].clientY);},{passive:false});
+  card.addEventListener('touchend',()=>onEnd());
+}
+
+function doComplete(ri){
+  if(tasks[cur][ri])tasks[cur][ri].done=!tasks[cur][ri].done;
+  if(navigator.vibrate)navigator.vibrate(20);
+  scheduleSave(); render();
+}
+
+function makeCard(t,dispIdx,isDone){
   const wrap=document.createElement('div');
-  wrap.className='swipe-wrap'+(isDone?' swipe-done-card':'');
+  wrap.className='swipe-wrap';
 
-  // Left reveal (complete / uncomplete)
-  const leftAct=document.createElement('div');
-  leftAct.className='swipe-actions-left';
-  leftAct.style.background=isDone?'#8e8e93':'#34c759';
-  const completeBtn=document.createElement('button');
-  completeBtn.className='swipe-action-btn '+(isDone?'sa-uncomplete':'sa-complete');
-  completeBtn.innerHTML=isDone?'<i class="ti ti-x"></i>':'<i class="ti ti-check"></i>';
-  completeBtn.title=isDone?'Ripristina':'Completa';
-  leftAct.appendChild(completeBtn);
-  wrap.appendChild(leftAct);
+  // Green bg for right swipe
+  const bgEl=document.createElement('div');
+  bgEl.className='swipe-bg-right';
+  bgEl.style.opacity=0;
+  const checkIconEl=document.createElement('i');
+  checkIconEl.className='ti ti-check check-icon';
+  bgEl.appendChild(checkIconEl);
+  wrap.appendChild(bgEl);
 
-  // Right reveal (edit + move)
+  // Right action buttons (left swipe reveals)
   const rightAct=document.createElement('div');
   rightAct.className='swipe-actions-right';
-  const moveBtn=document.createElement('button');
-  moveBtn.className='swipe-action-btn sa-move';
-  moveBtn.innerHTML='<i class="ti ti-folders"></i>';
-  moveBtn.title='Sposta';
   const editBtn=document.createElement('button');
   editBtn.className='swipe-action-btn sa-edit';
   editBtn.innerHTML='<i class="ti ti-pencil"></i>';
-  editBtn.title='Modifica';
+  const moveBtn=document.createElement('button');
+  moveBtn.className='swipe-action-btn sa-move';
+  moveBtn.innerHTML='<i class="ti ti-folders"></i>';
   rightAct.appendChild(editBtn);
   rightAct.appendChild(moveBtn);
   wrap.appendChild(rightAct);
@@ -362,31 +388,37 @@ function makeCard(t,displayIdx,isDone){
   const ri=(tasks[cur]||[]).indexOf(t);
   const card=document.createElement('div');
   card.className='task-card'+(isDone?' done-card':'');
+
   const chkBtn=document.createElement('button');
   chkBtn.className='chk'+(isDone?' on':'');
   chkBtn.innerHTML=isDone?'<i class="ti ti-check"></i>':'';
-  chkBtn.onclick=(e)=>{e.stopPropagation();if(activeSwipe===card){resetAllSwipes();return;}toggle(ri);};
+  chkBtn.onclick=e=>{e.stopPropagation();if(activeSwipe===card){resetAllSwipes();return;}toggle(ri);};
+
   const textEl=document.createElement('span');
   textEl.className='task-text'+(isDone?' struck':'');
   textEl.textContent=t.text;
+
   const delBtn=document.createElement('button');
   delBtn.className='del';
   delBtn.innerHTML='<i class="ti ti-trash"></i>';
-  delBtn.onclick=(e)=>{e.stopPropagation();del(ri);};
-  card.appendChild(chkBtn);card.appendChild(textEl);card.appendChild(delBtn);
+  delBtn.onclick=e=>{e.stopPropagation();del(ri);};
+
+  card.appendChild(chkBtn); card.appendChild(textEl); card.appendChild(delBtn);
   wrap.appendChild(card);
 
   // Button actions
-  completeBtn.onclick=()=>{doComplete(ri);};
-  editBtn.onclick=()=>{startEdit(ri,textEl,card);};
-  moveBtn.onclick=()=>{openSheet(displayIdx,isDone);};
+  editBtn.onclick=()=>{startEdit(ri,textEl);};
+  moveBtn.onclick=()=>{openSheet(dispIdx,isDone);};
 
-  // Tap on card when swiped — reset
-  card.addEventListener('click',e=>{
-    if(activeSwipe===card){e.preventDefault();e.stopPropagation();resetAllSwipes();return;}
-  });
+  // Tap on swiped card → reset
+  card.addEventListener('click',e=>{if(activeSwipe===card){e.preventDefault();e.stopPropagation();resetAllSwipes();return;}});
 
-  addSwipe(card,ri,isDone);
+  // Mac right click → context menu
+  card.addEventListener('contextmenu',e=>openCtx(e,ri,isDone,dispIdx,textEl));
+
+  // Touch swipe (iPhone)
+  addSwipe(card,ri,isDone,bgEl,checkIconEl);
+
   return wrap;
 }
 
@@ -394,19 +426,26 @@ function render(){
   const p=pending(cur),d=doneCount(cur);
   document.getElementById('view-title').textContent=cur;
   document.getElementById('view-sub').textContent=p===0&&d===0?'Nessun task':p===0?'Tutto fatto!':p===1?'1 task in sospeso':p+' task in sospeso';
-  const tw=document.getElementById('tabs');tw.innerHTML='';
-  cats.forEach(c=>{const p2=pending(c);const btn=document.createElement('button');btn.className='tab'+(c===cur?' active':'');btn.innerHTML=c+(p2>0?'<span class="tbadge">'+p2+'</span>':'');btn.onclick=()=>{cur=c;doneOpen=false;closeInline();resetAllSwipes();render();};tw.appendChild(btn);});
+  const tw=document.getElementById('tabs'); tw.innerHTML='';
+  cats.forEach(c=>{
+    const p2=pending(c);
+    const btn=document.createElement('button');
+    btn.className='tab'+(c===cur?' active':'');
+    btn.innerHTML=c+(p2>0?'<span class="tbadge">'+p2+'</span>':'');
+    btn.onclick=()=>{cur=c;doneOpen=false;closeInline();resetAllSwipes();render();};
+    tw.appendChild(btn);
+  });
   const todoItems=(tasks[cur]||[]).filter(t=>!t.done);
   const doneItems=(tasks[cur]||[]).filter(t=>t.done);
   document.getElementById('sec-label-todo').textContent=todoItems.length>0?'In sospeso':'';
-  const tl=document.getElementById('task-list-todo');tl.innerHTML='';
-  if(todoItems.length===0){tl.innerHTML='<div class="empty-state"><p>Nessun task. Aggiungine uno!</p></div>';}
-  else{todoItems.forEach((t,i)=>tl.appendChild(makeCard(t,i,false)));}
+  const tl=document.getElementById('task-list-todo'); tl.innerHTML='';
+  if(todoItems.length===0)tl.innerHTML='<div class="empty-state"><p>Nessun task. Aggiungine uno!</p></div>';
+  else todoItems.forEach((t,i)=>tl.appendChild(makeCard(t,i,false)));
   const dt=document.getElementById('done-toggle');
   if(doneItems.length>0){dt.style.display='flex';document.getElementById('done-toggle-label').textContent='Completati ('+doneItems.length+')';document.getElementById('done-chevron').className='ti ti-chevron-'+(doneOpen?'down':'right');}
-  else{dt.style.display='none';}
+  else dt.style.display='none';
   document.getElementById('done-section').style.display=doneOpen?'block':'none';
-  const dl=document.getElementById('task-list-done');dl.innerHTML='';
+  const dl=document.getElementById('task-list-done'); dl.innerHTML='';
   doneItems.forEach((t,i)=>dl.appendChild(makeCard(t,i,true)));
 }
 
@@ -418,14 +457,37 @@ function closeInline(){document.getElementById('add-ghost').style.display='flex'
 function toggleDoneSection(){doneOpen=!doneOpen;render();}
 function openModal(){renderCatList();document.getElementById('modal-bg').classList.add('open');}
 function closeModal(){document.getElementById('modal-bg').classList.remove('open');render();}
-function renderCatList(){const cl=document.getElementById('cat-list');cl.innerHTML='';cats.forEach((c,i)=>{const row=document.createElement('div');row.className='cat-item';row.innerHTML='<span>'+c+'</span><button class="cat-del-btn" onclick="delCat('+i+')"><i class="ti ti-x"></i></button>';cl.appendChild(row);});}
+
+// DRAG & DROP schede
+let dragSrcIdx=null;
+function renderCatList(){
+  const cl=document.getElementById('cat-list'); cl.innerHTML='';
+  cats.forEach((c,i)=>{
+    const row=document.createElement('div');
+    row.className='cat-item';
+    row.draggable=true;
+    row.dataset.idx=i;
+    row.innerHTML='<span class="drag-handle"><i class="ti ti-grip-vertical"></i></span><span>'+c+'</span><button class="cat-del-btn" onclick="delCat('+i+')"><i class="ti ti-x"></i></button>';
+    row.addEventListener('dragstart',e=>{dragSrcIdx=i;row.classList.add('dragging');e.dataTransfer.effectAllowed='move';});
+    row.addEventListener('dragend',()=>{row.classList.remove('dragging');document.querySelectorAll('.cat-item').forEach(r=>r.classList.remove('drag-over'));});
+    row.addEventListener('dragover',e=>{e.preventDefault();row.classList.add('drag-over');});
+    row.addEventListener('dragleave',()=>row.classList.remove('drag-over'));
+    row.addEventListener('drop',e=>{
+      e.preventDefault(); row.classList.remove('drag-over');
+      const destIdx=parseInt(row.dataset.idx);
+      if(dragSrcIdx===null||dragSrcIdx===destIdx)return;
+      const moved=cats.splice(dragSrcIdx,1)[0];
+      cats.splice(destIdx,0,moved);
+      dragSrcIdx=null;
+      scheduleSave(); renderCatList();
+    });
+    cl.appendChild(row);
+  });
+}
 function addCat(){const inp=document.getElementById('new-cat');const txt=inp.value.trim();if(!txt||cats.includes(txt))return;cats.push(txt);tasks[txt]=[];inp.value='';scheduleSave();renderCatList();}
 function delCat(i){const c=cats[i];if(cats.length<=1)return;cats.splice(i,1);delete tasks[c];if(cur===c)cur=cats[0];scheduleSave();renderCatList();}
 
-// Close swipes on tap outside
-document.addEventListener('click',e=>{
-  if(activeSwipe&&!activeSwipe.contains(e.target))resetAllSwipes();
-});
+document.addEventListener('click',e=>{if(activeSwipe&&!activeSwipe.parentElement.contains(e.target))resetAllSwipes();});
 
 checkAuth();
 </script>
